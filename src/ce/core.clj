@@ -1,8 +1,8 @@
 (ns ce.core
   (:gen-class)
   (:require [clj-http.client :as client]
-            [clojure.data.json :as json])
-  (:use hickory.core))
+            [clojure.data.json :as json]
+            [clojure.string :as s]))
 
 (def body
   (json/read-str
@@ -14,7 +14,7 @@
 (def rates
   (assoc
     (body "rates")
-    "EUR" 1.0 ))
+    baseCurrency 1.0))
 
 (defn convert
   [quantity from to]
@@ -23,15 +23,11 @@
 (defn -main
   "--"
   [& args]
-
   ;; parse parameters
-
-  ;; do conversion
-  (println baseCurrency)
-  (println date)
-  (println (rates "HUF"))
-  ;(println (* (rates "HUF") (rates "EUR") 123))
-  (println (convert 1000 "USD" "HUF" ))
+  (let [quantity (read-string (nth args 0))
+        from (s/upper-case (nth args 1))
+        to (s/upper-case (nth args 2))]
+    (println (convert quantity from to )))
 )
 
 
