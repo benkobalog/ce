@@ -10,26 +10,42 @@
   (s/select
       (s/descendant
         (s/class  "js-todaysrates-rows")
-        (s/tag :strong)
-        )
+        (s/tag :strong))
         content))
 
 (def getRatesRaw
   (s/select
     (s/descendant
       (s/class "js-todaysrates-rows")
-      (s/class "rates")
-      )
+      (s/class "rates"))
     content))
 
-(def ratesList (map first (map :content getRatesRaw)))
-(def currencyPairList  (partition 2 2 (map first (map :content getCurrencyPairsRaw))))
+
+(def ratesList
+  (map read-string
+     (map first
+        (map :content getRatesRaw))))
+
+(def currencyPairList
+  (partition 2 2
+     (map first
+        (map :content getCurrencyPairsRaw))))
+
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
 
-  (clojure.pprint/pprint  (map vector currencyPairList ratesList))
+  ;; parse parameters
+
+  ;; do conversion
+  (clojure.pprint/pprint  ratesList)
+  (clojure.pprint/pprint  currencyPairList)
+  (clojure.pprint/pprint  (+ (nth ratesList 3) (nth ratesList 4)))
+
+
+  ;;(clojure.pprint/pprint  (map vector currencyPairList ratesList))
+
 
   (println "End of program"))
 
