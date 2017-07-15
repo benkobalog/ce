@@ -20,15 +20,15 @@
   (if
     (.exists (io/file dataFile))
     (slurp dataFile)
-    ((saveTodaysData)
-    (getRatesJson))))
-
+    (do
+      (saveTodaysData)
+      getRatesJson)))
 
 (def body
   (json/read-str (readTodaysData)))
 
 (def baseCurrency (body "base"))
-(def date (body "date"))
+;(def date (body "date"))
 (def rates
   (assoc
     (body "rates")
